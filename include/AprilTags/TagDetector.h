@@ -13,7 +13,7 @@ namespace AprilTags {
 
 class TagDetector {
  public:
-  const TagFamily thisTagFamily;
+  TagFamily thisTagFamily;
 
   //! Constructor
   // note: TagFamily is instantiated here from TagCodes
