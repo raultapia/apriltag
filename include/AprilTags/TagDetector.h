@@ -8,6 +8,8 @@
 #include "AprilTags/TagDetection.h"
 #include "AprilTags/TagFamily.h"
 #include "AprilTags/FloatImage.h"
+#include "AprilTags/Tag36h11.h"
+
 
 namespace AprilTags {
 
@@ -20,6 +22,14 @@ class TagDetector {
   TagDetector(const TagCodes& tagCodes) : thisTagFamily(tagCodes) {}
 
   std::vector<TagDetection> extractTags(const cv::Mat& image);
+};
+
+class AprilGridDetector : public TagDetector {
+public:
+  AprilGridDetector()
+    : TagDetector(AprilTags::tagCodes36h11) {
+   thisTagFamily.blackBorder = 2;
+  }
 };
 
 }  // namespace
