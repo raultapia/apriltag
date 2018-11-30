@@ -36,6 +36,10 @@ using namespace std;
 namespace AprilTags {
 
 std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
+  return static_cast<const TagDetector *>(this)->extractTags(image);
+}
+
+std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
 
   // convert to internal AprilTags image (todo: slow, change internally to
   // OpenCV)
@@ -614,10 +618,6 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
   // " unique tags=" << goodDetections.size() << endl;
 
   return goodDetections;
-}
-
-std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
-  return static_cast<const TagDetector *>(this)->extractTags(image);
 }
 
 }  // namespace
