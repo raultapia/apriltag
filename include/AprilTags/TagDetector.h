@@ -22,6 +22,7 @@ class TagDetector {
   TagDetector(const TagCodes& tagCodes) : thisTagFamily(tagCodes) {}
 
   std::vector<TagDetection> extractTags(const cv::Mat& image);
+  std::vector<TagDetection> extractTags(const cv::Mat& image) const;
 };
 
 class AprilGridDetector : public TagDetector {

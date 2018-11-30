@@ -616,4 +616,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) {
   return goodDetections;
 }
 
+std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
+  return static_cast<const TagDetector *>(this)->extractTags(image);
+}
+
 }  // namespace
