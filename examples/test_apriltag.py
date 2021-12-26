@@ -2,7 +2,7 @@ import cv2
 import apriltag_pybind as apriltag
 
 # Load image
-img = cv2.imread("test.jpg", cv2.IMREAD_GRAYSCALE)
+img = cv2.imread("aprilgrid.jpeg", cv2.IMREAD_GRAYSCALE)
 tag_data = apriltag.detect(img)
 
 # Detect

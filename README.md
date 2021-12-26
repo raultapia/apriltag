@@ -7,15 +7,22 @@ original AprilTag was developed by Ed Olsen:
     Proceedings of the IEEE International Conference on Robotics and
     Automation (ICRA), 2011
 
-but it has been **extended with python bindings**. Example python code
-(`apriltag/test_aprilgrid.py`):
+but it has been **extended**:
+
+1. Adds `AprilGridDetector` so that a calibration target like this:
+
+.. image: examples/aprilgrid.jpeg
+  :width: 400
+
+2. Adds **python3 bindings**. Example code
+   (`apriltag/examples/test_aprilgrid.py`):
 
 ```
 import cv2
 import apriltag_pybind as apriltag
 
 # Load image
-img = cv2.imread("test.jpg", cv2.IMREAD_GRAYSCALE)
+img = cv2.imread("aprilgrid.jpeg", cv2.IMREAD_GRAYSCALE)
 tag_data = apriltag.detect(img)
 
 # Detect
@@ -37,18 +44,22 @@ cv2.waitKey(0)
 
 There are make targets for convenience:
 
-  make deps
-  make build
-  make install
-  make clean
+```
+make deps
+make build
+make install
+make clean
+```
 
-or you can issue standard cmake build commands:
+alternatively you can issue standard cmake build commands:
 
-    mkdir -p build
-    cd build
-    cmake ..
-    make
-    sudo make install
+```
+mkdir -p build
+cd build
+cmake ..
+make
+sudo make install
+```
 
 
 ## LICENCE
