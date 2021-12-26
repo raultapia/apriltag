@@ -6,17 +6,8 @@ jobs:
     steps:
     - uses: actions/checkout@master
 
-    - name: Install dependencies
-      run: make deps
+    - name: Build
+      run: make
 
-    - name: Build AprilTag
-      run: make apriltag
-
-    - name: Install AprilTag
-      run: make install_apriltag
-
-    - name: Build AprilTag Python Bindings
-      run: make pybind
-
-    - name: Install AprilTag Python Bindings
-      run: make install_pybind
+    - name: Install
+      run: make install
