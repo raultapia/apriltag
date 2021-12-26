@@ -1,4 +1,5 @@
-# AprilTag
+AprilTag
+========
 
 This repo is a copy of Michael Kaess' AprilTag implementation in C++. The
 original AprilTag was developed by Ed Olsen:
@@ -7,61 +8,69 @@ original AprilTag was developed by Ed Olsen:
     Proceedings of the IEEE International Conference on Robotics and
     Automation (ICRA), 2011
 
-but it has been **extended**:
+but it has been **extended** with:
 
-1. Adds `AprilGridDetector` so that a calibration target like this:
+1. An `AprilGridDetector` to facilitate detecting a grid of AprilTags 
+   (used for camera calibration):
 
-.. image: examples/aprilgrid.jpeg
-  :width: 400
+.. image:: examples/aprilgrid.jpeg
+  :align: center
+  :width: 300
+  
+  
 
-2. Adds **python3 bindings**. Example code
+2. **Python3 bindings**. Example code
    (`apriltag/examples/test_aprilgrid.py`):
 
-```
-import cv2
-import apriltag_pybind as apriltag
+.. code-block:: python
 
-# Load image
-img = cv2.imread("aprilgrid.jpeg", cv2.IMREAD_GRAYSCALE)
-tag_data = apriltag.detect(img)
+    import cv2
+    import apriltag_pybind as apriltag
 
-# Detect
-viz = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
-for (tag_id, corner_idx, kp_x, kp_y) in tag_data:
-    pt = (int(kp_x), int(kp_y))
-    radius = 5
-    color = (0, 0, 255)
-    thickness = 2
-    cv2.circle(viz, pt, radius, color, thickness)
+    # Load image
+    img = cv2.imread("aprilgrid.jpeg", cv2.IMREAD_GRAYSCALE)
+    tag_data = apriltag.detect(img)
 
-# Visualize
-cv2.imshow("Viz", viz)
-cv2.waitKey(0)
-```
+    # Detect
+    viz = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    for (tag_id, corner_idx, kp_x, kp_y) in tag_data:
+        pt = (int(kp_x), int(kp_y))
+        radius = 5
+        color = (0, 0, 255)
+        thickness = 2
+        cv2.circle(viz, pt, radius, color, thickness)
+
+    # Visualize
+    cv2.imshow("Viz", viz)
+    cv2.waitKey(0)
 
 
-## Build
+Build
+-----
 
 There are make targets for convenience:
 
-```
-make deps
-make build
-make install
-make clean
-```
+.. code-block::
+
+    make deps
+    make build
+    make install
+    make clean
+
 
 alternatively you can issue standard cmake build commands:
 
-```
-mkdir -p build
-cd build
-cmake ..
-make
-sudo make install
-```
+.. code-block::
+
+    mkdir -p build
+    cd build
+    cmake ..
+    make
+    sudo make install
 
 
-## LICENCE
+LICENCE
+-------
+
 
 GNU LGPL version 2.1.
