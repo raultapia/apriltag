@@ -57,6 +57,7 @@ There are make targets for convenience:
     make deps
     make build
     make install
+    make run_python_example
     make clean
 
 
