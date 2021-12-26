@@ -20,7 +20,7 @@ but it has been **extended** with:
   
 
 2. **Python3 bindings**. Example code
-   (`apriltag/examples/test_aprilgrid.py`):
+   (:code:`apriltag/examples/test_aprilgrid.py`):
 
 .. code-block:: python
 
