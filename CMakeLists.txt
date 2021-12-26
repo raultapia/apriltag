@@ -1,9 +1,10 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 PROJECT(apriltag)
 
-# Compilation settings
+# Settings
 SET(CMAKE_BUILD_TYPE RELEASE)
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+SET(PYTHON_LIBRARY_DIR "/usr/local/lib/python3.6/dist-packages")
 
 # Dependencies
 FIND_PACKAGE(Eigen3 REQUIRED)
@@ -31,7 +32,6 @@ INSTALL (
 # Python binding
 PYBIND11_ADD_MODULE(${PROJECT_NAME}_pybind MODULE python/apriltag_pybind.cc)
 TARGET_LINK_LIBRARIES(${PROJECT_NAME}_pybind PRIVATE ${DEPS})
-SET(PYTHON_LIBRARY_DIR "/usr/local/lib/python3.6/dist-packages")
 INSTALL(
   TARGETS ${PROJECT_NAME}_pybind
   COMPONENT python
