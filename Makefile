@@ -1,4 +1,4 @@
-default: deps apriltag apriltag_pybind
+default: deps apriltag
 .PHONY: default deps apriltag apriltag_pybind install_apriltag
 
 deps:
@@ -13,11 +13,13 @@ apriltag:
 	@git submodule update
 	@make -s -C apriltag
 
-apriltag_pybind:
+pybind:
 	@make -s -C apriltag_pybind
 
-install:
+install_apriltag:
 	@make -C apriltag -s install
+
+install_pybind:
 	@make -C apriltag_pybind -s install
 
 clean:

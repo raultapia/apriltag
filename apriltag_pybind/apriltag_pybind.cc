@@ -5,12 +5,6 @@
 
 namespace py = pybind11;
 
-void imshow(const std::string &title, const py::array_t<uint8_t> &img) {
-  py::buffer_info buf = img.request();
-  cv::Mat mat(buf.shape[0], buf.shape[1], CV_8UC1, (unsigned char *) buf.ptr);
-  cv::imshow(title, mat);
-}
-
 py::list detect(const py::array_t<uint8_t> &image_nparray) {
   // Form Image - np.array to cv::Mat
   py::buffer_info buf = image_nparray.request();
@@ -67,6 +61,5 @@ py::list detect(const py::array_t<uint8_t> &image_nparray) {
 
 PYBIND11_MODULE(apriltag_pybind, m) {
   m.doc() = "AprilTag Python Bindings";
-  m.def("imshow", &imshow);
   m.def("detect", &detect);
 }
