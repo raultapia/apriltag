@@ -15,3 +15,11 @@ apriltag:
 
 apriltag_pybind:
 	@make -s -C apriltag_pybind
+
+install:
+	@make -C apriltag -s install
+	@make -C apriltag_pybind -s install
+
+clean:
+	@make -C apriltag -s clean
+	@make -C apriltag_pybind -s clean
