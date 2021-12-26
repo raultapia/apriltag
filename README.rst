@@ -10,7 +10,7 @@ original AprilTag was developed by Ed Olsen:
 
 but it has been **extended** with:
 
-1. An `AprilGridDetector` to facilitate detecting a grid of AprilTags 
+1. An :code:`AprilGridDetector` to facilitate detecting a grid of AprilTags 
    (used for camera calibration):
 
 .. image:: examples/aprilgrid.jpeg
