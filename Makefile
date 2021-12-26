@@ -1,4 +1,5 @@
 default: deps build
+.PHONY: deps build install run_python_example clean
 
 deps:
 	@sudo apt-get install -y -qq \

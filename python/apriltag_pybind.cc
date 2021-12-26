@@ -23,40 +23,24 @@ py::list detect(const py::array_t<uint8_t> &image_nparray) {
             [](const AprilTags::TagDetection &a,
                const AprilTags::TagDetection &b) { return (a.id < b.id); });
 
-  // Setup data
-  const double min_border_dist = 4.0;
-  const int img_rows = image.rows;
-  const int img_cols = image.cols;
+  // Setup return data
   py::list detections;
-
   for (const auto &tag : tags) {
     if (!tag.good) {
       continue;
     }
 
     for (int corner_idx = 0; corner_idx < 4; corner_idx++) {
-      bool keep = false;
-      const auto kp_x = tag.p[corner_idx].first;
-      const auto kp_y = tag.p[corner_idx].second;
-      keep |= kp_x < min_border_dist;
-      keep |= kp_x > img_cols - min_border_dist;
-      keep |= kp_y < min_border_dist;
-      keep |= kp_y > img_rows - min_border_dist;
-      if (keep) {
-        continue;
-      }
-
       py::list tag_data;
       tag_data.append(tag.id);
       tag_data.append(corner_idx);
-      tag_data.append(kp_x);
-      tag_data.append(kp_y);
-
+      tag_data.append(tag.p[corner_idx].first);
+      tag_data.append(tag.p[corner_idx].second);
       detections.append(tag_data);
     }
   }
 
-  return detections;
+  return detections; // List[List[TagId, CornerIndex, KeypointX, KeypointY]]
 }
 
 PYBIND11_MODULE(apriltag_pybind, m) {
