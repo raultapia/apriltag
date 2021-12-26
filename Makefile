@@ -1,5 +1,5 @@
-default: deps build python
-.PHONY: default deps build python install
+default: deps apriltag apriltag_pybind
+.PHONY: default deps apriltag apriltag_pybind install_apriltag
 
 deps:
 	@sudo apt-get install -y -qq \
@@ -8,16 +8,10 @@ deps:
 		libopencv-* \
 		python3-dev
 
-build:
+apriltag:
 	@git submodule init
 	@git submodule update
-	@mkdir -p build \
-		&& cd build \
-		&& cmake .. \
-		&& make
+	@make -s -C apriltag
 
-python:
-	@cd python && mkdir -p build && cd build && cmake .. && make
-
-install:
-	cd build && sudo make install
+apriltag_pybind:
+	@make -s -C apriltag_pybind
