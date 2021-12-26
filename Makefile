@@ -2,7 +2,11 @@ default: deps build python
 .PHONY: default deps build python install
 
 deps:
-	@sudo apt-get install -y -qq python3-dev libopencv-*
+	@sudo apt-get install -y -qq \
+		libeigen3-dev \
+		libeigen3-doc \
+		libopencv-* \
+		python3-dev
 
 build:
 	@git submodule init
