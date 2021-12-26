@@ -1,6 +1,9 @@
 AprilTag
 ========
 
+.. image:: https://github.com/chutsu/apriltag/workflows/ci/badge.svg
+  :target: https://github.com/chutsu/apriltag/actions?query=ci
+
 This repo is a copy of Michael Kaess' AprilTag implementation in C++. The
 original AprilTag was developed by Ed Olsen:
 
@@ -10,14 +13,13 @@ original AprilTag was developed by Ed Olsen:
 
 but it has been **extended** with:
 
-1. An :code:`AprilGridDetector` to facilitate detecting a grid of AprilTags 
+1. An :code:`AprilGridDetector` to facilitate detecting a grid of AprilTags
    (used for camera calibration):
 
 .. image:: examples/aprilgrid.jpeg
   :align: center
   :width: 300
-  
-  
+
 
 2. **Python3 bindings**. Example code
    (:code:`apriltag/examples/test_aprilgrid.py`):
