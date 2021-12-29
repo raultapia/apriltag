@@ -5,7 +5,7 @@
 
 namespace py = pybind11;
 
-py::list detect(const py::array_t<uint8_t> &image_nparray) {
+py::list detect(py::array_t<uint8_t> &image_nparray) {
   // Form Image - np.array to cv::Mat
   py::buffer_info buf = image_nparray.request();
   const cv::Mat image(buf.shape[0],
