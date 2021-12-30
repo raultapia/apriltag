@@ -11,7 +11,7 @@ deps:
 build:
 	@git submodule init
 	@git submodule update
-	@mkdir -p build && cd build && cmake .. && make
+	@mkdir -p build && cd build && cmake .. -DBUILD_PYBINDS=ON && make
 
 install:
 	@cd build && sudo make install
