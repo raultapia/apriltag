@@ -5,10 +5,10 @@ namespace AprilTags {
 
 GLineSegment2D::GLineSegment2D(const std::pair<float, float> &p0Arg,
                                const std::pair<float, float> &p1Arg)
-    : line(p0Arg, p1Arg), p0(p0Arg), p1(p1Arg), weight() {}
+    : line(p0Arg, p1Arg), p0(p0Arg), p1(p1Arg) {}
 
-GLineSegment2D GLineSegment2D::lsqFitXYW(
-    const std::vector<XYWeight> &xyweight) {
+GLineSegment2D
+GLineSegment2D::lsqFitXYW(const std::vector<XYWeight> &xyweight) {
   GLine2D gline = GLine2D::lsqFitXYW(xyweight);
   float maxcoord = -std::numeric_limits<float>::infinity();
   float mincoord = std::numeric_limits<float>::infinity();
@@ -26,4 +26,4 @@ GLineSegment2D GLineSegment2D::lsqFitXYW(
   return GLineSegment2D(minValue, maxValue);
 }
 
-}  // namespace
+} // namespace
