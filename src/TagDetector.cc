@@ -126,7 +126,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
   float segSigma = 0.8f;
 
   if (sigma > 0) {
-    int filtsz = ((int)max(3.0f, 3 * sigma)) | 1;
+    int filtsz = ((int) max(3.0f, 3 * sigma)) | 1;
     std::vector<float> filt = Gaussian::makeGaussianFilter(sigma, filtsz);
     fim.filterFactoredCentered(filt, filt);
   }
@@ -143,7 +143,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       fimSeg = fim;
     } else {
       // blur anew
-      int filtsz = ((int)max(3.0f, 3 * segSigma)) | 1;
+      int filtsz = ((int) max(3.0f, 3 * segSigma)) | 1;
       std::vector<float> filt = Gaussian::makeGaussianFilter(segSigma, filtsz);
       fimSeg = fimOrig;
       fimSeg.filterFactoredCentered(filt, filt);
@@ -162,7 +162,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       float Iy = fimSeg.get(x, y + 1) - fimSeg.get(x, y - 1);
 
       float mag = Ix * Ix + Iy * Iy;
-#if 0  // kaess: fast version, but maybe less accurate?
+#if 0 // kaess: fast version, but maybe less accurate?
       float theta = MathUtil::fast_atan2(Iy, Ix);
 #else
       float theta = atan2(Iy, Ix);
@@ -183,7 +183,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
         cv::Vec3b v;
         //        float vf = fimMag.get(x,y);
         float vf = fimOrig.get(x, y);
-        int val = (int)(vf * 255.);
+        int val = (int) (vf * 255.);
         if ((val & 0xffff00) != 0) {
           printf("problem... %i\n", val);
         }
@@ -216,7 +216,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
      * could be a problem elsewhere for bigger images... so store on heap */
     vector<float> storage(
         width * height *
-        4);  // do all the memory in one big block, exception safe
+        4); // do all the memory in one big block, exception safe
     float *tmin = &storage[width * height * 0];
     float *tmax = &storage[width * height * 1];
     float *mmin = &storage[width * height * 2];
@@ -226,7 +226,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       for (int x = 0; x + 1 < width; x++) {
 
         float mag0 = fimMag.get(x, y);
-        if (mag0 < Edge::minMag) continue;
+        if (mag0 < Edge::minMag)
+          continue;
         mmax[y * width + x] = mag0;
         mmin[y * width + x] = mag0;
 
@@ -252,16 +253,16 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
   // cluster.
   // We will soon fit lines (segments) to these points.
 
-  map<int, vector<XYWeight> > clusters;
+  map<int, vector<XYWeight>> clusters;
   for (int y = 0; y + 1 < fimSeg.getHeight(); y++) {
     for (int x = 0; x + 1 < fimSeg.getWidth(); x++) {
       if (uf.getSetSize(y * fimSeg.getWidth() + x) <
           Segment::minimumSegmentSize)
         continue;
 
-      int rep = (int)uf.getRepresentative(y * fimSeg.getWidth() + x);
+      int rep = (int) uf.getRepresentative(y * fimSeg.getWidth() + x);
 
-      map<int, vector<XYWeight> >::iterator it = clusters.find(rep);
+      map<int, vector<XYWeight>>::iterator it = clusters.find(rep);
       if (it == clusters.end()) {
         clusters[rep] = vector<XYWeight>();
         it = clusters.find(rep);
@@ -273,8 +274,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
 
   //================================================================
   // Step five: Loop over the clusters, fitting lines (which we call Segments).
-  std::vector<Segment> segments;  // used in Step six
-  std::map<int, std::vector<XYWeight> >::const_iterator clustersItr;
+  std::vector<Segment> segments; // used in Step six
+  std::map<int, std::vector<XYWeight>>::const_iterator clustersItr;
   for (clustersItr = clusters.begin(); clustersItr != clusters.end();
        clustersItr++) {
     std::vector<XYWeight> points = clustersItr->second;
@@ -282,7 +283,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
 
     // filter short lines
     float length = MathUtil::distance2D(gseg.getP0(), gseg.getP1());
-    if (length < Segment::minimumLineLength) continue;
+    if (length < Segment::minimumLineLength)
+      continue;
 
     Segment seg;
     float dy = gseg.getP1().second - gseg.getP0().second;
@@ -304,8 +306,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
     for (unsigned int i = 0; i < points.size(); i++) {
       XYWeight xyw = points[i];
 
-      float theta = fimTheta.get((int)xyw.x, (int)xyw.y);
-      float mag = fimMag.get((int)xyw.x, (int)xyw.y);
+      float theta = fimTheta.get((int) xyw.x, (int) xyw.y);
+      float mag = fimMag.get((int) xyw.x, (int) xyw.y);
 
       // err *should* be +M_PI/2 for the correct winding, but if we
       // got the wrong winding, it'll be around -M_PI/2.
@@ -318,7 +320,7 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
     }
 
     if (flip > noflip) {
-      float temp = seg.getTheta() + (float)M_PI;
+      float temp = seg.getTheta() + (float) M_PI;
       seg.setTheta(temp);
     }
 
@@ -373,12 +375,15 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
     Segment &parentseg = segments[i];
 
     // compute length of the line segment
-    GLine2D parentLine(
-        std::pair<float, float>(parentseg.getX0(), parentseg.getY0()),
-        std::pair<float, float>(parentseg.getX1(), parentseg.getY1()));
+    GLine2D parentLine(std::pair<float, float>(parentseg.getX0(),
+                                               parentseg.getY0()),
+                       std::pair<float, float>(parentseg.getX1(),
+                                               parentseg.getY1()));
 
-    Gridder<Segment>::iterator iter = gridder.find(
-        parentseg.getX1(), parentseg.getY1(), 0.5f * parentseg.getLength());
+    Gridder<Segment>::iterator iter =
+        gridder.find(parentseg.getX1(),
+                     parentseg.getY1(),
+                     0.5f * parentseg.getLength());
     while (iter.hasNext()) {
       Segment &child = iter.next();
       if (MathUtil::mod2pi(child.getTheta() - parentseg.getTheta()) > 0) {
@@ -394,10 +399,14 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
         continue;
       }
 
-      float parentDist = MathUtil::distance2D(
-          p, std::pair<float, float>(parentseg.getX1(), parentseg.getY1()));
-      float childDist = MathUtil::distance2D(
-          p, std::pair<float, float>(child.getX0(), child.getY0()));
+      float parentDist =
+          MathUtil::distance2D(p,
+                               std::pair<float, float>(parentseg.getX1(),
+                                                       parentseg.getY1()));
+      float childDist =
+          MathUtil::distance2D(p,
+                               std::pair<float, float>(child.getX0(),
+                                                       child.getY0()));
 
       if (max(parentDist, childDist) > parentseg.getLength()) {
         // cout << "intersection too far" << endl;
@@ -429,27 +438,47 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       std::pair<float, float> p2 = quad.quadPoints[1];
       std::pair<float, float> p3 = quad.quadPoints[2];
       std::pair<float, float> p4 = quad.quadPoints[3];
-      cv::line(image, cv::Point2f(p1.first, p1.second),
-               cv::Point2f(p2.first, p2.second), cv::Scalar(0, 0, 255, 0));
-      cv::line(image, cv::Point2f(p2.first, p2.second),
-               cv::Point2f(p3.first, p3.second), cv::Scalar(0, 0, 255, 0));
-      cv::line(image, cv::Point2f(p3.first, p3.second),
-               cv::Point2f(p4.first, p4.second), cv::Scalar(0, 0, 255, 0));
-      cv::line(image, cv::Point2f(p4.first, p4.second),
-               cv::Point2f(p1.first, p1.second), cv::Scalar(0, 0, 255, 0));
+      cv::line(image,
+               cv::Point2f(p1.first, p1.second),
+               cv::Point2f(p2.first, p2.second),
+               cv::Scalar(0, 0, 255, 0));
+      cv::line(image,
+               cv::Point2f(p2.first, p2.second),
+               cv::Point2f(p3.first, p3.second),
+               cv::Scalar(0, 0, 255, 0));
+      cv::line(image,
+               cv::Point2f(p3.first, p3.second),
+               cv::Point2f(p4.first, p4.second),
+               cv::Scalar(0, 0, 255, 0));
+      cv::line(image,
+               cv::Point2f(p4.first, p4.second),
+               cv::Point2f(p1.first, p1.second),
+               cv::Scalar(0, 0, 255, 0));
 
       p1 = quad.interpolate(-1, -1);
       p2 = quad.interpolate(-1, 1);
       p3 = quad.interpolate(1, 1);
       p4 = quad.interpolate(1, -1);
-      cv::circle(image, cv::Point2f(p1.first, p1.second), 3,
-                 cv::Scalar(0, 255, 0, 0), 1);
-      cv::circle(image, cv::Point2f(p2.first, p2.second), 3,
-                 cv::Scalar(0, 255, 0, 0), 1);
-      cv::circle(image, cv::Point2f(p3.first, p3.second), 3,
-                 cv::Scalar(0, 255, 0, 0), 1);
-      cv::circle(image, cv::Point2f(p4.first, p4.second), 3,
-                 cv::Scalar(0, 255, 0, 0), 1);
+      cv::circle(image,
+                 cv::Point2f(p1.first, p1.second),
+                 3,
+                 cv::Scalar(0, 255, 0, 0),
+                 1);
+      cv::circle(image,
+                 cv::Point2f(p2.first, p2.second),
+                 3,
+                 cv::Scalar(0, 255, 0, 0),
+                 1);
+      cv::circle(image,
+                 cv::Point2f(p3.first, p3.second),
+                 3,
+                 cv::Scalar(0, 255, 0, 0),
+                 1);
+      cv::circle(image,
+                 cv::Point2f(p4.first, p4.second),
+                 3,
+                 cv::Scalar(0, 255, 0, 0),
+                 1);
     }
     cv::imshow("debug_april", image);
   }
@@ -474,9 +503,10 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       for (int ix = -1; ix <= dd; ix++) {
         float x = (ix + 0.5f) / dd;
         std::pair<float, float> pxy = quad.interpolate01(x, y);
-        int irx = (int)(pxy.first + 0.5);
-        int iry = (int)(pxy.second + 0.5);
-        if (irx < 0 || irx >= width || iry < 0 || iry >= height) continue;
+        int irx = (int) (pxy.first + 0.5);
+        int iry = (int) (pxy.second + 0.5);
+        if (irx < 0 || irx >= width || iry < 0 || iry >= height)
+          continue;
         float v = fim.get(irx, iry);
         if (iy == -1 || iy == dd || ix == -1 || ix == dd)
           whiteModel.addObservation(x, y, v);
@@ -492,8 +522,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       for (int ix = 0; ix < thisTagFamily.dimension; ix++) {
         float x = (thisTagFamily.blackBorder + ix + 0.5f) / dd;
         std::pair<float, float> pxy = quad.interpolate01(x, y);
-        int irx = (int)(pxy.first + 0.5);
-        int iry = (int)(pxy.second + 0.5);
+        int irx = (int) (pxy.first + 0.5);
+        int iry = (int) (pxy.second + 0.5);
         if (irx < 0 || irx >= width || iry < 0 || iry >= height) {
           // cout << "*** bad:  irx=" << irx << "  iry=" << iry << endl;
           bad = true;
@@ -504,15 +534,22 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
             0.5f;
         float v = fim.get(irx, iry);
         tagCode = tagCode << 1;
-        if (v > threshold) tagCode |= 1;
+        if (v > threshold)
+          tagCode |= 1;
 #ifdef DEBUG_APRIL
         {
           if (v > threshold)
-            cv::circle(image, cv::Point2f(irx, iry), 1,
-                       cv::Scalar(0, 0, 255, 0), 2);
+            cv::circle(image,
+                       cv::Point2f(irx, iry),
+                       1,
+                       cv::Scalar(0, 0, 255, 0),
+                       2);
           else
-            cv::circle(image, cv::Point2f(irx, iry), 1,
-                       cv::Scalar(0, 255, 0, 0), 2);
+            cv::circle(image,
+                       cv::Point2f(irx, iry),
+                       1,
+                       cv::Scalar(0, 255, 0, 0),
+                       2);
         }
 #endif
       }
@@ -526,8 +563,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
       thisTagDetection.homography = quad.homography.getH();
       thisTagDetection.hxy = quad.homography.getCXY();
 
-      float c = std::cos(thisTagDetection.rotation * (float)M_PI / 2);
-      float s = std::sin(thisTagDetection.rotation * (float)M_PI / 2);
+      float c = std::cos(thisTagDetection.rotation * (float) M_PI / 2);
+      float s = std::sin(thisTagDetection.rotation * (float) M_PI / 2);
       Eigen::Matrix3d R;
       R.setZero();
       R(0, 0) = R(1, 1) = c;
@@ -581,7 +618,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
   // NOTE: allow multiple non-overlapping detections of the same target.
 
   for (vector<TagDetection>::const_iterator it = detections.begin();
-       it != detections.end(); it++) {
+       it != detections.end();
+       it++) {
     const TagDetection &thisTagDetection = *it;
 
     bool newFeature = true;
@@ -609,7 +647,8 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
         goodDetections[odidx] = thisTagDetection;
     }
 
-    if (newFeature) goodDetections.push_back(thisTagDetection);
+    if (newFeature)
+      goodDetections.push_back(thisTagDetection);
   }
 
   // cout << "AprilTags: edges=" << nEdges << " clusters=" << clusters.size() <<
@@ -620,4 +659,4 @@ std::vector<TagDetection> TagDetector::extractTags(const cv::Mat &image) const {
   return goodDetections;
 }
 
-}  // namespace
+} // namespace
