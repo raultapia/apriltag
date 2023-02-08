@@ -67,7 +67,7 @@ alternatively you can issue standard cmake build commands:
 
     mkdir -p build
     cd build
-    cmake ..
+    cmake .. -DBUILD_PYBINDS=ON
     make
     sudo make install
 
